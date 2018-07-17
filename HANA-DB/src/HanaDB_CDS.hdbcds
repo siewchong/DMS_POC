@@ -1,0 +1,24 @@
+namespace DMS_POC."HANA-DB";
+
+context HanaDB_CDS {
+
+    /*@@layout{"layoutInfo":{"x":163,"y":196.5}}*/
+    entity MST_UOM {
+        key UOM_ID    : Integer    not null;
+            UOM_CD    : String(20) not null;
+            UOM_DESC  : String(50) not null;
+            MODIFY_DT : UTCDateTime;
+    };
+
+    /*@@layout{"layoutInfo":{"x":-187,"y":149.5}}*/
+    entity MST_PRDUOM {
+        key PRD_ID      : Integer        not null;
+        key UOM_ID      : Integer        not null;
+            UOM_LEVEL   : Integer        not null;
+            SML_IND     : Boolean        not null default '0';
+            DEFAULT_IND : Boolean        not null default '0';
+            SALE_IND    : Boolean        not null default '0';
+            CONV_FACTOR : Decimal(20, 3) not null;
+            MODIFY_DT   : UTCDateTime;
+    };
+};

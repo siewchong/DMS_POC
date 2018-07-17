@@ -1,0 +1,61 @@
+ID: DMS_POC
+_schema-version: '2.1'
+modules:
+ - name: DMS_POC_appRouter
+   type: javascript.nodejs
+   parameters:
+      disk-quota: 256M
+      memory: 256M
+   build-parameters:
+      builder: grunt
+      type: '%appRouter%'
+   requires:
+    - name: rt_DMS_POC_appRouter
+ - name: DMS_POCui_deployer
+   type: com.sap.html5.application-content
+   parameters:
+      path: deployer
+   build-parameters:
+      type: com.sap.html5.application-content
+      builder: grunt
+   requires:
+    - name: dt_DMS_POC_appRouter
+
+ - name: HANA-DB
+   type: hdb
+   path: HANA-DB
+   requires:
+    - name: hdi_HANA-DB
+
+
+ - name: HANA-XSODATA
+   type: nodejs
+   path: HANA-XSODATA
+   provides:
+    - name: HANA-XSODATA_api
+      properties:
+         url: ${default-url}
+
+parameters:
+   deploy_mode: html5-repo
+resources:
+ - name: rt_DMS_POC_appRouter
+   parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+ - name: dt_DMS_POC_appRouter
+   parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+   type: org.cloudfoundry.managed-service
+
+ - name: hdi_HANA-DB
+   parameters:
+      config:
+         schema: HANA_DB_ODATA_DEMO
+   properties:
+      hdi-container-name: ${service-name}
+   type: com.sap.xs.hdi-container
+
+version: 0.0.1
